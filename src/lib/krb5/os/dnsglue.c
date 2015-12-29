@@ -103,7 +103,11 @@ krb5int_dns_init(struct krb5int_dns_state **dsp,
     memset(&statbuf, 0, sizeof(statbuf));
     ret = res_ninit(&statbuf);
 #else
+#if ANDROID
+    ret = -1;
+#else
     ret = res_init();
+#endif
 #endif
     if (ret < 0)
         return -1;
@@ -123,8 +127,12 @@ krb5int_dns_init(struct krb5int_dns_state **dsp,
         len = res_nsearch(&statbuf, host, ds->nclass, ds->ntype,
                           ds->ansp, ds->ansmax);
 #else
+#if ANDROID
+        len = -1;
+#else
         len = res_search(host, ds->nclass, ds->ntype,
                          ds->ansp, ds->ansmax);
+#endif
 #endif
         if ((size_t) len > maxincr) {
             ret = -1;

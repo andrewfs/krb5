@@ -34,7 +34,7 @@
 #include <cyassl/ctaocrypt/aes.h>
 
 static inline void
-xor_words(word* first, const word* second, word32 len) 
+xor_words(word32* first, const word32* second, word32 len) 
 {
     word32 i;
 
@@ -46,8 +46,8 @@ xor_words(word* first, const word* second, word32 len)
 static inline void
 xor_buf(byte* buffer, const byte* m, word32 len)
 {
-    if ( ((word)buffer | (word)m | len) & (WORD_SIZE == 0) ) {
-        xor_words( (word*)buffer, (const word*)m, len / WORD_SIZE);
+    if ( ((word32)buffer | (word32)m | len) & (CYASSL_WORD_SIZE == 0) ) {
+        xor_words( (word32*)buffer, (const word32*)m, len / CYASSL_WORD_SIZE);
     } else {
         word32 i;
         for (i = 0; i < len; i++) {
